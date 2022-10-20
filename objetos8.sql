@@ -56,3 +56,51 @@ update ejemplo_tabla_anidada set direc= tabla_anidada(direccion('calle Sol,2','M
 													  
 --Se borran las direcciones
 delete from table(select e.direc from ejemplo_tabla_anidada e where id=1) primera where value(primera)=direccion('calle Cielo,2','Burgos',19984);
+
+--Clausula THE
+--Obtener las calles de la fila id=1 cuya ciudad sea GUADALAJARA
+select calle from the(select e.direc from ejemplo_tabla_anidada E where id=1) where ciudad='Madrid';
+
+--Como sería la misma consulta con el operador TABLE
+select dir.calle
+	from ejemplo_tabla_anidada E, TABLE(E.direc) dir
+	where E.id=1 and dir.ciudad='Madrid';
+
+--Crear un procedimiento en PL que reciba un id y visualice las calles que tiene.
+create or replace procedure ver_direc(ident number)as
+  cursor c1 is select calle 
+  			from the(select e.direc 
+  				     from ejemplo_tabla_anidada E 
+  			             where id=ident);
+
+begin
+   for I in c1 loop
+       dbms_output.put_line(I.calle);
+   end loop;
+end;
+/   
+-- Mostrar resultado
+begin
+   ver_direc(1);
+end;
+/    			
+
+--Hacer el procedimiento usando el operador TABLE
+create or replace procedure ver_direc2(ident number) as
+    cursor c1 is select dir.calle 
+      			from ejemplo_tabla_anidada E, table(E.direc) dir
+      			where E.id=ident;
+      			
+begin
+   for i in c1 loop
+   	dbms_output.put_line(i.calle);
+   end loop;
+end;
+/   	      			             
+
+-- Mostrar resultado
+begin 
+  ver_direc2(1);
+  end;
+  /
+
