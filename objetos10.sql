@@ -106,9 +106,9 @@ insert into listas_de_compras select 1, current_date, ref(c), tab_lista_detalle(
 									from customers c where c.id=1;
 									
 insert into listas_de_compras values(3, sysdate,(select ref(c)
-													from customers c 
-													    where c.id=1), tab_lista_detalle(tipo_lista_detalle(1,tipo_articulo(1,'Barra de pan','baguette',1,7),4),  
-																						 tipo_lista_detalle(2,tipo_articulo(2,'lonchas de jamón','ibérico',6,7),4)));									
+							from customers c 
+		     				        where c.id=1), tab_lista_detalle(tipo_lista_detalle(1,tipo_articulo(1,'Barra de pan','baguette',1,7),4),  
+								                         tipo_lista_detalle(2,tipo_articulo(2,'lonchas de jamón','ibérico',6,7),4)));									
 
 -- Muestra con una select los datos de la lista de la compra.
 select * from listas_de_compras; 
