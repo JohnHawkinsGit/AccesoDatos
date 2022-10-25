@@ -61,4 +61,57 @@ insert into productos values(4,'ipad',600,5);
 insert into productos values(5,'ordenador portatil',400,10);
 
 
-	
+-- 2. Diseña el modelo objeto-relacional
+drop type tip_venta;
+drop type tip_lineas_venta;
+drop type tip_linea_venta;
+drop type tip_producto;
+drop type tip_cliente;
+drop type tip_direccion;
+drop type tip_telefonos;
+
+
+create or replace type tip_telefonos as table of varchar2(15);
+/
+create or replace type tip_direccion as object(
+    calle varchar2(50),
+    poblacion varchar2(50),
+    codpos varchar2(20),
+    provincia varchar2(40)
+);
+/
+
+create or replace type tip_cliente as object(
+    idcliente number,
+    nombre varchar2(50),
+    direc tip_direccion,
+    nif varchar2(9),
+    telef tip_telefonos
+);
+/
+
+create or replace type tip_producto as object(
+    idproducto number,
+    descripcion varchar2(80),
+    pvp number,
+    stockactual number
+);
+/
+
+create or replace type tip_linea_venta as object(
+    numerolinea number,
+    idproducto ref tip_producto,
+    cantidad number
+);
+/
+
+create or replace type tip_lineas_venta as table of tip_linea_venta;
+/
+create or replace type tip_venta as object(
+    idventa number,
+    idcliente ref tip_cliente,
+    fechaventa date,
+    lineas tip_lineas_venta,
+    member function total_venta return number
+);
+/	
