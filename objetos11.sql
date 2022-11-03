@@ -175,31 +175,21 @@ insert into tabla_productos values(5, 'ordenador portatil',400,10);
 
 -- 6. Consultas
 -- 6.1 Visualizar todas las líneas de venta para la venta id 2. 
-	 select lin.* from tabla_ventas tv, table(tv.lineas) lin where tv.idventa=2;
+	 select * from the(select tv.lineas from tabla_ventas tv where tv.idventa=2);
 
--- 6.1.2Haz la consulta de otra forma sin sacar el nombre del objeto, usando TABLE.
-	
+-- 6.1.2 Haz la consulta de otra forma sin sacar el nombre del objeto, usando TABLE.
+	 select lin.* from tabla_ventas tv, table(tv.lineas) lin where tv.idventa=2;
 
 -- 6.2 Visualizar todas las líneas de venta para la venta id 2, obteniendo los productos en vez de su oid.
 
 -- 6.3 Visualizar todas las líneas de venta de todas las ventas.
 
 -- 6.4 Consulta el nombre del cliente idcliente 2
+	select nombre from tabla_clientes where idcliente=2;
 
 -- 6.5 Modifica el nombre del cliente 2 por Rosa Serrano
+	update tabla_clientes set nombre='Rosa Serrano' where idcliente=2;
 
 -- 6.6 Consulta la dirección del cliente 2 y modifica la calle por calle Estopa,34
-
--- 6.7 Consulta todos los datos del cliente 1 y añade un nuevo teléfono a su lista de teléfonos. Haz la consulta de otra forma usando value
-
--- 6.8 Visualiza el nombre del cliente que ha realizado la venta
-
--- 6.8.2 Haz la misma consulta usando DEREF
-
--- 6.9 Visualiza todos los datos del cliente anterior, que ha realizado la venta 2
-
--- 6.10 Visualizar el numero de venta y el total de ventas hechas por el cliente 1
-
--- 6.11 Visualiza las ventas de todos los clientes
-
--- 6.12 Crea un procedimiento que reciba como parámetro un id de venta y visualice los datos de la venta cuyo identificador recibe
+	select tc.direc.calle from tabla_clientes tc where idcliente=2;
+	update tabla_clientes tc set tc.direc.calle='calle Estopa,34' where idcliente =2;
