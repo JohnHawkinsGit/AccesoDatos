@@ -201,15 +201,22 @@ insert into tabla_productos values(5, 'ordenador portatil',400,10);
 	
 	select value(cli) from tabla_clientes cli where idcliente=1;
 	
-
 -- 6.8 Visualiza el nombre del cliente que ha realizado la venta
-
+	select tv.idcliente.nombre from tabla_ventas tv;
+	
 -- 6.8.2 Haz la misma consulta usando DEREF
+	select deref(idcliente).nombre from tabla_ventas;
+	
 
 -- 6.9 Visualiza todos los datos del cliente anterior, que ha realizado la venta 2
+	select deref(idcliente) from tabla_ventas where idventa=2;
 
 -- 6.10 Visualizar el numero de venta y el total de ventas hechas por el cliente 1
+	select idventa, tv.total_venta() from tabla_ventas tv where tv.idcliente.idcliente =1;
+	
+	select idventa, tv.total_venta() from tabla_ventas tv where deref(idcliente).idcliente =1;
 
 -- 6.11 Visualiza las ventas de todos los clientes
+	select idventa,deref(idcliente).idcliente cliente, lin.idproducto.descripcion producto, lin.cantidad from tabla_ventas tv, table(tv.lineas) lin;
 
 -- 6.12 Crea un procedimiento que reciba como parámetro un id de venta y visualice los datos de la venta cuyo identificador recibe
