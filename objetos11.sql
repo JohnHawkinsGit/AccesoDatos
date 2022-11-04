@@ -198,7 +198,7 @@ insert into tabla_productos values(5, 'ordenador portatil',400,10);
 
 -- 6.7 Consulta todos los datos del cliente 1 y añade un nuevo teléfono a su lista de teléfonos. Haz la consulta de otra forma usando value
 	select * from tabla_clientes cli where idcliente=1;
-	
+	update tabla_clientes set telef=tip_telefonos('949876655','949876655','666888555')where idcliente=1;
 	select value(cli) from tabla_clientes cli where idcliente=1;
 	
 -- 6.8 Visualiza el nombre del cliente que ha realizado la venta
