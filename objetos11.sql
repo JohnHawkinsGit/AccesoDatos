@@ -220,3 +220,25 @@ insert into tabla_productos values(5, 'ordenador portatil',400,10);
 	select idventa,deref(idcliente).idcliente cliente, lin.idproducto.descripcion producto, lin.cantidad from tabla_ventas tv, table(tv.lineas) lin;
 
 -- 6.12 Crea un procedimiento que reciba como parámetro un id de venta y visualice los datos de la venta cuyo identificador recibe
+create or replace procedure mostrar(vp_idventa tabla_ventas.idventa%type) as 
+lineas number;
+	cantidad number;
+	importe number;
+	total_v number;
+	product tip_producto:=tip_producto(NULL,NULL,NULL,NULL);
+	cli tip_cliente:= tip_cliente(NULL,NULL,NULL,NULL,NULL);
+	direccion tip_direccion:=tip_direccion(NULL,NULL,NULL,NULL);
+	fecha date;
+
+begin 
+	select deref(idcliente),fechaventa,tv.total_venta() into cli,fecha,total_v from tabla_ventas tv where idventa=vp_idventa;
+	select direc into direccion from tabla_clientes where cli.idcliente=idcliente; 
+	DBMS_OUTPUT.PUT_LINE('Número de venta: '||vp_idventa||'Fecha de Venta: '||fecha);
+	DBMS_OUTPUT.PUT_LINE('Cliente: '||cli.nombre);
+	DBMS_OUTPUT.PUT_LINE('Dirección: '||direccion.calle);
+	DBMS_OUTPUT.PUT_LINE('*************************************************');
+	
+	
+	DBMS_OUTPUT.PUT_LINE('Total Venta:'||total_v);
+end;
+/
