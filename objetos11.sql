@@ -220,25 +220,39 @@ insert into tabla_productos values(5, 'ordenador portatil',400,10);
 	select idventa,deref(idcliente).idcliente cliente, lin.idproducto.descripcion producto, lin.cantidad from tabla_ventas tv, table(tv.lineas) lin;
 
 -- 6.12 Crea un procedimiento que reciba como parámetro un id de venta y visualice los datos de la venta cuyo identificador recibe
+select lin.numerolinea, lin.cantidad, deref(lin.idproducto) from tabla_ventas tv, table(tv.lineas) lin where tv.idventa=2;
+
 create or replace procedure mostrar(vp_idventa tabla_ventas.idventa%type) as 
-lineas number;
+	lineas number;
 	cantidad number;
 	importe number;
 	total_v number;
 	product tip_producto:=tip_producto(NULL,NULL,NULL,NULL);
-	cli tip_cliente:= tip_cliente(NULL,NULL,NULL,NULL,NULL);
-	direccion tip_direccion:=tip_direccion(NULL,NULL,NULL,NULL);
+	cli tip_cliente;
+	linea_venta tip_linea_venta;
+	direccion tip_direccion;
 	fecha date;
-
+	cursor c1 is
+		select deref(lin.idproducto),lin.cantidad,lin.numerolinea from tabla_ventas tv, table(tv.lineas) lin where tv.idventa=vp_idventa;
 begin 
+	
 	select deref(idcliente),fechaventa,tv.total_venta() into cli,fecha,total_v from tabla_ventas tv where idventa=vp_idventa;
 	select direc into direccion from tabla_clientes where cli.idcliente=idcliente; 
 	DBMS_OUTPUT.PUT_LINE('Número de venta: '||vp_idventa||'Fecha de Venta: '||fecha);
 	DBMS_OUTPUT.PUT_LINE('Cliente: '||cli.nombre);
 	DBMS_OUTPUT.PUT_LINE('Dirección: '||direccion.calle);
 	DBMS_OUTPUT.PUT_LINE('*************************************************');
+	open c1;
+	fetch c1 into product,cantidad,lineas;
+	loop	
+		
+		DBMS_OUTPUT.PUT_LINE(lineas||' '||product.descripcion||' '||product.pvp||' '||cantidad||' '||cantidad*product.pvp);
+		fetch c1 into product,cantidad,lineas;
+		exit when c1%NOTFOUND;
+	end loop;
+	close c1;
 	
 	
 	DBMS_OUTPUT.PUT_LINE('Total Venta:'||total_v);
 end;
-/
+/		
